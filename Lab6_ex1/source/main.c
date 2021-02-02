@@ -30,7 +30,7 @@ TCNT1 = 0;
 
 _avr_timer_cntcurr = _avr_timer_M;
 
-SREG != 0x80;
+SREG |= 0x80;
 
 }
 
@@ -62,6 +62,50 @@ enum Light_States { Start,init,one,two,three } state;
 
 void fsm(){
 	
+switch(state){
+
+	case Start:
+		state = init;
+		break;
+	case init:
+		state = one;
+		break;
+	case one:
+		state = two;
+		break;
+	case two:
+		state = three;
+		break;
+	case three:
+		state = one;
+		break;
+
+
+	default:
+		break;
+}
+
+switch(state){
+
+	case Start:
+		break;
+	case init:
+		PORTB = 0;
+		break;
+	case one:
+		PORTB = 1;
+		break;
+	case two:
+		PORTB = 0x02;
+		break;
+	case three:
+		PORTB = 0x04;
+		break;
+
+	default:
+		break;
+}
+
 }
 
 
@@ -71,12 +115,18 @@ DDRB = 0xFF; PORTB = 0x00;
 TimerSet(1000);
 TimerOn();
 unsigned char tmpB = 0x00;
+TimerSet(1000);
+TimerOn();
 
 
+
+state = Start;
     /* Insert your solution below */
     while (1) {
-
-	    
+	tmpB = ~tmpB;
+	PORTB = tmpB;
+	while(!TimerFlag);
+	TimerFlag = 0;	
 		
     }
     return 1;
