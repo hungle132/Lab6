@@ -8,6 +8,7 @@
  *	code, is my own original work.
  */
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #ifdef _SIMULATE_
 #include "simAVRHeader.h"
 #endif
@@ -112,19 +113,18 @@ switch(state){
 int main(void) {
     /* Insert DDR and PORT initializations */
 DDRB = 0xFF; PORTB = 0x00;
-TimerSet(1000);
+TimerSet(100);
 TimerOn();
-unsigned char tmpB = 0x00;
-TimerSet(1000);
-TimerOn();
+//unsigned char tmpB = 0x00;
+//TimerSet(1000);
+//TimerOn();
 
-
-
-state = Start;
+state = init;
     /* Insert your solution below */
     while (1) {
-	tmpB = ~tmpB;
-	PORTB = tmpB;
+//	tmpB = ~tmpB;
+//	PORTB = tmpB;
+	fsm();
 	while(!TimerFlag);
 	TimerFlag = 0;	
 		
