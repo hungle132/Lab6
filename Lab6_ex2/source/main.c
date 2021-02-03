@@ -57,7 +57,7 @@ void TimerSet(unsigned long M){
 }
 
 
-enum Light_States { Start,init,one,two,three,four,five,six,seven,eight } state;
+enum Light_States { Start,init,one,wait1,move1,two,three,four,five,six,seven,eight } state;
 
 unsigned char but1 = 0x00;
 
@@ -74,7 +74,34 @@ switch(state){
 		state = one;
 		break;
 	case one:
+		if(but1){
+		state = wait1;
+		}
+		else if (!but1){
 		state = two;
+		}
+		break;
+
+	case wait1:
+		if(!but1){
+		state = move1;
+		}
+		else if (but1){
+		state = wait1;
+		}
+
+		break;
+
+	case move1:
+		if(but1){
+
+		state = two;
+		}
+
+		else{
+		state = move1;
+		}
+
 		break;
 	case two:
 		state = three;
